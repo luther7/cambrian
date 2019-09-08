@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -xeuo pipefail
+
+#
+# Template the admin environment.
+#
+
+for ext in env tfvars; do
+  if [ ! -f "environments/admin/seed.${ext}" ]; then
+	  cp "environments/admin/seed.${ext}.example" \
+	     "environments/admin/seed.${ext}"
+  fi
+done
