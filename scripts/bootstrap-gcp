@@ -17,13 +17,13 @@ set -xeuo pipefail
 source "environments/admin/seed.env"
 
 # IAM roles for the admin project to bind to the Terraform service account.
-TF_PROJECT_IAM_ROLES=(
+GCP_TF_PROJECT_IAM_ROLES=(
   "viewer"
   "storage.admin"
 )
 
 # IAM roles for the organization to bind to the Terraform service account.
-TF_ORGANIZATION_IAM_ROLES=(
+GCP_TF_ORGANIZATION_IAM_ROLES=(
   "resourcemanager.projectCreator"
   "billing.user"
   "dns.admin"
@@ -52,42 +52,42 @@ for service in "${GCP_SERVICES[@]}"; do
 done
 
 # Create the service account.
-gcloud iam service-accounts create "${TF_SERVICE_ACCOUNT}" \
+gcloud iam service-accounts create "${GCP_TF_SERVICE_ACCOUNT}" \
   --display-name "Terraform account"
 
 # Create the service account's credentials.
 # shellcheck disable=SC2086
-gcloud iam service-accounts keys create ${TF_CREDENTIALS_FILE} \
-  --iam-account "${TF_SERVICE_ACCOUNT}@${GCP_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com"
+gcloud iam service-accounts keys create ${GCP_TF_CREDENTIALS_FILE} \
+  --iam-account "${GCP_TF_SERVICE_ACCOUNT}@${GCP_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com"
 
 # Bind project roles to the service account.
-for role in "${TF_PROJECT_IAM_ROLES[@]}"; do
+for role in "${GCP_TF_PROJECT_IAM_ROLES[@]}"; do
   gcloud projects add-iam-policy-binding "${GCP_ADMIN_PROJECT_NAME}" \
-    --member "serviceAccount:${TF_SERVICE_ACCOUNT}@${GCP_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com" \
+    --member "serviceAccount:${GCP_TF_SERVICE_ACCOUNT}@${GCP_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com" \
     --role "roles/${role}"
 done
 
 # Bind organization roles to the service account.
-for role in "${TF_ORGANIZATION_IAM_ROLES[@]}"; do
+for role in "${GCP_TF_ORGANIZATION_IAM_ROLES[@]}"; do
   gcloud organizations add-iam-policy-binding "${GCP_ORGANIZATION_ID}" \
-    --member "serviceAccount:${TF_SERVICE_ACCOUNT}@${GCP_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com" \
+    --member "serviceAccount:${GCP_TF_SERVICE_ACCOUNT}@${GCP_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com" \
     --role "roles/${role}"
 done
 
 # Create the bucket which will contain the Terraform state.
-gsutil mb -p "${GCP_ADMIN_PROJECT_NAME}" "gs://${TF_STATE_BUCKET_NAME}"
+gsutil mb -p "${GCP_ADMIN_PROJECT_NAME}" "gs://${GCP_TF_STATE_BUCKET_NAME}"
 
 # Enable versioning on the Terraform state bucket.
-gsutil versioning set on "gs://${TF_STATE_BUCKET_NAME}"
+gsutil versioning set on "gs://${GCP_TF_STATE_BUCKET_NAME}"
 
 # Barf a Terraform backend file.
 cat > "environments/admin/backend.tfvars" <<EOF
-bucket  = "${TF_STATE_BUCKET_NAME}"
+bucket  = "${GCP_TF_STATE_BUCKET_NAME}"
 prefix  = "terraform/state"
 EOF
 
 # Barf a shell environment file to source for running Terraform.
 cat > "environments/admin/google.env" <<EOF
-export GOOGLE_APPLICATION_CREDENTIALS="${TF_CREDENTIALS_FILE}"
+export GOOGLE_APPLICATION_CREDENTIALS="${GCP_TF_CREDENTIALS_FILE}"
 export GOOGLE_PROJECT="${GCP_ADMIN_PROJECT_NAME}"
 EOF

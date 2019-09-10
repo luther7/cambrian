@@ -12,16 +12,16 @@ gcp_organization_id = "111111111111"
 gcp_billing_account_id = "111111-111111-111111"
 
 # DNS domain.
-dns_domain = "example.com"
+gcp_dns_domain = "example.com"
 
 # Name of the root DNS zone.
-dns_root_zone = "example-zone"
+gcp_dns_root_zone = "example-zone"
 
 # Admin email address for SSL certs.
-dns_admin_email = "admin@example.com"
+gcp_dns_admin_email = "admin@example.com"
 
 # GCP admin project name.
 gcp_admin_project_name = "example-terraform-admin"
 
 # Name of the service account for Terraform.
-tf_service_account = "terraform"
+gcp_tf_service_account = "terraform"
