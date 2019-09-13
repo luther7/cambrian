@@ -17,20 +17,20 @@ set -xeuo pipefail
 source "environments/admin/seed.env"
 
 # IAM roles for the admin project to bind to the Terraform service account.
-GCP_TF_PROJECT_IAM_ROLES=(
+GOOGLE_PROJECT_IAM_ROLES=(
   "viewer"
   "storage.admin"
 )
 
 # IAM roles for the organization to bind to the Terraform service account.
-GCP_TF_ORGANIZATION_IAM_ROLES=(
+GOOGLE_ORGANIZATION_IAM_ROLES=(
   "resourcemanager.projectCreator"
   "billing.user"
   "dns.admin"
 )
 
 # Services to enable.
-GCP_SERVICES=(
+GOOGLE_SERVICES=(
   "cloudresourcemanager.googleapis.com"
   "cloudbilling.googleapis.com"
   "iam.googleapis.com"
@@ -38,56 +38,56 @@ GCP_SERVICES=(
 )
 
 # Create the admin project.
-gcloud projects create "${GCP_ADMIN_PROJECT_NAME}" \
-  --organization "${GCP_ORGANIZATION_ID}" \
+gcloud projects create "${GOOGLE_ADMIN_PROJECT_NAME}" \
+  --organization "${GOOGLE_ORGANIZATION_ID}" \
   --set-as-default
 
 # Link billing account.
-gcloud beta billing projects link "${GCP_ADMIN_PROJECT_NAME}" \
-  --billing-account "${GCP_BILLING_ACCOUNT_ID}"
+gcloud beta billing projects link "${GOOGLE_ADMIN_PROJECT_NAME}" \
+  --billing-account "${GOOGLE_BILLING_ACCOUNT_ID}"
 
 # Enable services.
-for service in "${GCP_SERVICES[@]}"; do
+for service in "${GOOGLE_SERVICES[@]}"; do
   gcloud services enable "${service}"
 done
 
 # Create the service account.
-gcloud iam service-accounts create "${GCP_TF_SERVICE_ACCOUNT}" \
+gcloud iam service-accounts create "${GOOGLE_SERVICE_ACCOUNT}" \
   --display-name "Terraform account"
 
 # Create the service account's credentials.
 # shellcheck disable=SC2086
-gcloud iam service-accounts keys create ${GCP_TF_CREDENTIALS_FILE} \
-  --iam-account "${GCP_TF_SERVICE_ACCOUNT}@${GCP_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com"
+gcloud iam service-accounts keys create ${GOOGLE_CREDENTIALS_FILE} \
+  --iam-account "${GOOGLE_SERVICE_ACCOUNT}@${GOOGLE_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com"
 
 # Bind project roles to the service account.
-for role in "${GCP_TF_PROJECT_IAM_ROLES[@]}"; do
-  gcloud projects add-iam-policy-binding "${GCP_ADMIN_PROJECT_NAME}" \
-    --member "serviceAccount:${GCP_TF_SERVICE_ACCOUNT}@${GCP_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com" \
+for role in "${GOOGLE_PROJECT_IAM_ROLES[@]}"; do
+  gcloud projects add-iam-policy-binding "${GOOGLE_ADMIN_PROJECT_NAME}" \
+    --member "serviceAccount:${GOOGLE_SERVICE_ACCOUNT}@${GOOGLE_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com" \
     --role "roles/${role}"
 done
 
 # Bind organization roles to the service account.
-for role in "${GCP_TF_ORGANIZATION_IAM_ROLES[@]}"; do
-  gcloud organizations add-iam-policy-binding "${GCP_ORGANIZATION_ID}" \
-    --member "serviceAccount:${GCP_TF_SERVICE_ACCOUNT}@${GCP_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com" \
+for role in "${GOOGLE_ORGANIZATION_IAM_ROLES[@]}"; do
+  gcloud organizations add-iam-policy-binding "${GOOGLE_ORGANIZATION_ID}" \
+    --member "serviceAccount:${GOOGLE_SERVICE_ACCOUNT}@${GOOGLE_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com" \
     --role "roles/${role}"
 done
 
 # Create the bucket which will contain the Terraform state.
-gsutil mb -p "${GCP_ADMIN_PROJECT_NAME}" "gs://${GCP_TF_STATE_BUCKET_NAME}"
+gsutil mb -p "${GOOGLE_ADMIN_PROJECT_NAME}" "gs://${GOOGLE_TERRAFORM_STATE_BUCKET_NAME}"
 
 # Enable versioning on the Terraform state bucket.
-gsutil versioning set on "gs://${GCP_TF_STATE_BUCKET_NAME}"
+gsutil versioning set on "gs://${GOOGLE_TERRAFORM_STATE_BUCKET_NAME}"
 
 # Barf a Terraform backend file.
 cat > "environments/admin/backend.tfvars" <<EOF
-bucket  = "${GCP_TF_STATE_BUCKET_NAME}"
+bucket  = "${GOOGLE_TERRAFORM_STATE_BUCKET_NAME}"
 prefix  = "terraform/state"
 EOF
 
 # Barf a shell environment file to source for running Terraform.
-cat > "environments/admin/google.env" <<EOF
-export GOOGLE_APPLICATION_CREDENTIALS="${GCP_TF_CREDENTIALS_FILE}"
-export GOOGLE_PROJECT="${GCP_ADMIN_PROJECT_NAME}"
+cat > "environments/admin/credentials.env" <<EOF
+export GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_CREDENTIALS_FILE}"
+export GOOGLE_PROJECT="${GOOGLE_ADMIN_PROJECT_NAME}"
 EOF

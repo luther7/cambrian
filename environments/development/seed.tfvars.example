@@ -2,32 +2,32 @@
 # Terraform variables for the environment.
 #
 
-# GCP project name.
-gcp_project_name = "development"
+# Project name.
+google_project_name = "development"
 
-# GCP DNS Subdomain.
-gcp_dns_subdomain = "development"
+# DNS Subdomain.
+google_dns_subdomain = "development"
 
-# GCP region.
-gcp_region = "australia-southeast1"
+# Region.
+google_region = "australia-southeast1"
 
-# GCP primary zone.
-gcp_primary_zone = "australia-southeast1-a"
+# Primary zone.
+google_primary_zone = "australia-southeast1-a"
 
 # IP CIDR to allow SSH from.
-gcp_ssh_ip_cidr = "0.0.0.0/0"
-
-# Public SSH key.
-gcp_ssh_public_key = "SNIP"
+google_ssh_ip_cidr = "0.0.0.0/0"
 
 # IP CIDR range allowed to access the Kubernetes API.
-gcp_authorized_cidr_range  = "0.0.0.0/0"
+google_kube_api_ip_cidr  = "0.0.0.0/0"
 
-# Kubernetes node pool min node count.
-gcp_kube_node_pool_min_node_count = 2
+# Public SSH key.
+google_ssh_public_key = "SNIP"
 
-# Kubernetes node pool max node count.
-gcp_kube_node_pool_max_node_count = 2
+# Kubernetes node pool min count.
+google_kube_node_pool_min_count = 2
+
+# Kubernetes node pool max count.
+google_kube_node_pool_max_count = 2
 
 # Kubernetes node machine type.
-gcp_node_machine_type = "n1-standard-2"
+google_kube_node_machine_type = "n1-standard-2"

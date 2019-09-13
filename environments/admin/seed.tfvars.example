@@ -1,27 +1,21 @@
 #
-# Terraform variables for the GCP Terraform admin environment.
+# Terraform variables for the admin environment.
 #
 
-# GCP parent project name.
-gcp_organization_name = "example"
+# Google admin project name.
+google_admin_project_name = "example-terraform-admin"
 
-# GCP billing ID.
-gcp_organization_id = "111111111111"
+# Google organization ID.
+google_organization_id = "111111111111"
 
-# GCP billing ID.
-gcp_billing_account_id = "111111-111111-111111"
-
-# DNS domain.
-gcp_dns_domain = "example.com"
-
-# Name of the root DNS zone.
-gcp_dns_root_zone = "example-zone"
-
-# Admin email address for SSL certs.
-gcp_dns_admin_email = "admin@example.com"
-
-# GCP admin project name.
-gcp_admin_project_name = "example-terraform-admin"
+# Google billing ID.
+google_billing_account_id = "111111-111111-111111"
 
 # Name of the service account for Terraform.
-gcp_tf_service_account = "terraform"
+google_service_account = "terraform"
+
+# Name of the root DNS zone.
+google_dns_root_zone = "example-zone"
+
+# DNS domain.
+google_dns_domain = "example.com"

@@ -3,75 +3,75 @@
 #
 
 #
-# GCP.
+# Google.
 #
 
-variable "gcp_project_name" {
-  description = "GCP project name"
+variable "google_region" {
+  description = "Region"
 }
 
-variable "gcp_region" {
-  description = "GCP region"
+variable "google_primary_zone" {
+  description = "Primary zone"
 }
 
-variable "gcp_primary_zone" {
-  description = "GCP primary zone"
+variable "google_project_name" {
+  description = "Project name"
 }
 
-variable "gcp_admin_project_name" {
-  description = "GCP admin project name"
+variable "google_admin_project_name" {
+  description = "Admin project name"
 }
 
-variable "gcp_organization_id" {
-  description = "GCP organization ID"
+variable "google_organization_id" {
+  description = "Organization ID"
 }
 
-variable "gcp_billing_account_id" {
-  description = "GCP billing ID"
+variable "google_billing_account_id" {
+  description = "Billing ID"
 }
 
-variable "gcp_dns_root_zone" {
+variable "google_service_account_name" {
+  description = "Service account name"
+}
+
+variable "google_dns_root_zone" {
   description = "Root DNS zone"
 }
 
-variable "gcp_dns_domain" {
+variable "google_dns_domain" {
   description = "DNS domain"
 }
 
-variable "gcp_dns_subdomain" {
+variable "google_dns_subdomain" {
   description = "DNS subdomain"
 }
 
-variable "gcp_service_account_name" {
-  description = "GCP service account name"
-}
-
-variable "gcp_ssh_ip_cidr" {
+variable "google_ssh_ip_cidr" {
   description = "IP CIDR to allow SSH from"
 }
 
-variable "gcp_ssh_public_key" {
+variable "google_ssh_public_key" {
   description = "Public SSH key"
 }
 
-variable "gcp_authorized_cidr_range" {
+variable "google_kube_api_ip_cidr" {
   description = "IP CIDR range allowed to access the Kubernetes API"
 }
 
-variable "gcp_project_services" {
-  description = "GCP project services"
+variable "google_project_services" {
+  description = "Project services"
 
   default = [
-    "container.gcpapis.com",
-    "compute.gcpapis.com",
-    "iam.gcpapis.com",
-    "cloudresourcemanager.gcpapis.com",
-    "dns.gcpapis.com",
-    "logging.gcpapis.com"
+    "container.googleapis.com",
+    "compute.googleapis.com",
+    "iam.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "dns.googleapis.com",
+    "logging.googleapis.com"
   ]
 }
 
-variable "gcp_service_account_roles" {
+variable "google_service_account_roles" {
   description = "Roles to add to the service account"
 
   default = [
@@ -83,18 +83,18 @@ variable "gcp_service_account_roles" {
   ]
 }
 
-variable "gcp_cidr_block" {
+variable "google_cidr_block" {
   description = "Main VPC CIDR block"
   default     = "10.0.0.0/16"
 }
 
-variable "gcp_bastion_cidr_block" {
+variable "google_bastion_cidr_block" {
   description = "CIDR block for bastions"
   default     = "192.168.1.0/24"
 }
 
-variable "gcp_subnetwork_secondary_ip_ranges" {
-  description = "Secondary IP ranges to add to the subnetwork"
+variable "google_subnetwork_secondary_ip_cidr_blocks" {
+  description = "Secondary IP CIDR blocks to add to the subnetwork"
 
   default = [
     {
@@ -108,22 +108,17 @@ variable "gcp_subnetwork_secondary_ip_ranges" {
   ]
 }
 
-variable "gcp_master_ipv4_cidr_block" {
-  description = "Kubernetes master ipv4 cidr block"
-  default     = "10.0.0.0/28"
-}
-
-variable "gcp_kube_node_pool_min_node_count" {
-  description = "Kubernetes node pool min node count"
+variable "google_kube_node_pool_min_count" {
+  description = "Kubernetes node pool min count"
   default     = 2
 }
 
-variable "gcp_kube_node_pool_max_node_count" {
-  description = "Kubernetes node pool max node count"
+variable "google_kube_node_pool_max_count" {
+  description = "Kubernetes node pool max count"
   default     = 2
 }
 
-variable "gcp_node_machine_type" {
+variable "google_kube_node_machine_type" {
   description = "Kubernetes node machine type"
   default     = "n1-standard-2"
 }
