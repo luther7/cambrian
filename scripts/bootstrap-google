@@ -27,7 +27,6 @@ GOOGLE_PROJECT_IAM_ROLES=(
 GOOGLE_ORGANIZATION_IAM_ROLES=(
   "resourcemanager.projectCreator"
   "billing.user"
-  "dns.admin"
 )
 
 # Services to enable.
@@ -39,10 +38,15 @@ GOOGLE_SERVICES=(
   "dns.googleapis.com"
 )
 
+# Email of the service account.
+GOOGLE_SERVICE_ACCOUNT_EMAIL="${GOOGLE_SERVICE_ACCOUNT}@${GOOGLE_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com"
+
 # Create the admin project.
-gcloud projects create "${GOOGLE_ADMIN_PROJECT_NAME}" \
-  --organization "${GOOGLE_ORGANIZATION_ID}" \
-  --set-as-default
+if ! gcloud projects describe "${GOOGLE_ADMIN_PROJECT_NAME}" > /dev/null; then
+  gcloud projects create "${GOOGLE_ADMIN_PROJECT_NAME}" \
+    --organization "${GOOGLE_ORGANIZATION_ID}" \
+    --set-as-default
+fi
 
 # Link billing account.
 gcloud beta billing projects link "${GOOGLE_ADMIN_PROJECT_NAME}" \
@@ -54,30 +58,34 @@ for service in "${GOOGLE_SERVICES[@]}"; do
 done
 
 # Create the service account.
-gcloud iam service-accounts create "${GOOGLE_SERVICE_ACCOUNT}" \
-  --display-name "Terraform account"
+if ! gcloud iam service-accounts describe "${GOOGLE_SERVICE_ACCOUNT_EMAIL}" > /dev/null; then
+  gcloud iam service-accounts create "${GOOGLE_SERVICE_ACCOUNT}" \
+    --display-name "Terraform"
+fi
 
 # Create the service account's credentials.
 # shellcheck disable=SC2086
 gcloud iam service-accounts keys create ${GOOGLE_CREDENTIALS_FILE} \
-  --iam-account "${GOOGLE_SERVICE_ACCOUNT}@${GOOGLE_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com"
+  --iam-account "${GOOGLE_SERVICE_ACCOUNT_EMAIL}"
 
 # Bind project roles to the service account.
 for role in "${GOOGLE_PROJECT_IAM_ROLES[@]}"; do
   gcloud projects add-iam-policy-binding "${GOOGLE_ADMIN_PROJECT_NAME}" \
-    --member "serviceAccount:${GOOGLE_SERVICE_ACCOUNT}@${GOOGLE_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com" \
+    --member "serviceAccount:${GOOGLE_SERVICE_ACCOUNT_EMAIL}" \
     --role "roles/${role}"
 done
 
 # Bind organization roles to the service account.
 for role in "${GOOGLE_ORGANIZATION_IAM_ROLES[@]}"; do
   gcloud organizations add-iam-policy-binding "${GOOGLE_ORGANIZATION_ID}" \
-    --member "serviceAccount:${GOOGLE_SERVICE_ACCOUNT}@${GOOGLE_ADMIN_PROJECT_NAME}.iam.gserviceaccount.com" \
+    --member "serviceAccount:${GOOGLE_SERVICE_ACCOUNT_EMAIL}" \
     --role "roles/${role}"
 done
 
 # Create the bucket which will contain the Terraform state.
-gsutil mb -p "${GOOGLE_ADMIN_PROJECT_NAME}" "gs://${GOOGLE_TERRAFORM_STATE_BUCKET_NAME}"
+if ! gsutil list -p "${GOOGLE_ADMIN_PROJECT_NAME}" "gs://${GOOGLE_TERRAFORM_STATE_BUCKET_NAME}"; then
+  gsutil mb -p "${GOOGLE_ADMIN_PROJECT_NAME}" "gs://${GOOGLE_TERRAFORM_STATE_BUCKET_NAME}"
+fi
 
 # Enable versioning on the Terraform state bucket.
 gsutil versioning set on "gs://${GOOGLE_TERRAFORM_STATE_BUCKET_NAME}"
