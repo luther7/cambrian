@@ -67,6 +67,17 @@ module "google_network" {
   )
 }
 
+module "google_address" {
+  source = "./modules/google-address"
+
+  suffix                 = random_string.suffix.result
+  google_region          = var.google_region
+  google_primary_zone    = var.google_primary_zone
+  google_project_name = module.google_project.project_id
+  google_dns_zone        = module.google_dns_subdomain_zone.name
+  google_dns_record_name = "${var.google_dns_subdomain}.${var.google_dns_domain}."
+}
+
 module "google_bastion" {
   source = "./modules/google-bastion"
 
@@ -102,6 +113,12 @@ module "helm" {
   kube_cluster_ca_cert  = module.google_container_cluster.ca_cert
 }
 
+# module "cert-manager" {
+#   source = "./modules/cert-manager"
+
+#   kube_cluster_endpoint = module.google_container_cluster.endpoint
+#   kube_cluster_ca_cert  = module.google_container_cluster.ca_cert
+# }
 
 
 

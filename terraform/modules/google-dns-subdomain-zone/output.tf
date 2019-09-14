@@ -2,8 +2,8 @@
 # Output.
 #
 
-output "subdomain_zone_name" {
+output "name" {
   value       = google_dns_managed_zone.subdomain.name
-  description = "Project id"
+  description = "Subdomain zone name"
 }
 
