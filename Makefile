@@ -14,6 +14,10 @@ bootstrap.google:
 
 environment ?= development
 
+.PHONY: credentials.google
+credentials.google:
+	GOOGLE_ENVIRONMENT=$(environment). ./scripts/credentials-google
+
 .PHONY: workspace.new
 workspace.new:
 	$(MAKE) -C terraform workspace.new
