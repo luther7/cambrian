@@ -112,13 +112,3 @@ module "helm" {
   kube_cluster_endpoint = module.google_container_cluster.endpoint
   kube_cluster_ca_cert  = module.google_container_cluster.ca_cert
 }
-
-# module "cert-manager" {
-#   source = "./modules/cert-manager"
-
-#   kube_cluster_endpoint = module.google_container_cluster.endpoint
-#   kube_cluster_ca_cert  = module.google_container_cluster.ca_cert
-# }
-
-
-

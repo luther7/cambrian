@@ -7,12 +7,10 @@ A GKE cluster for experimentation.
 - [X] Google Cloud account set up scripts
 - [ ] Google Cloud
   - [ ] Bug in permission for setting NS records in root zone 
-  - [ ] Docs
-- [ ] Helm
-- [ ] Cert manager
+- [X] Helm
+- [ ] Istio
 - [ ] Example application
 - [ ] Prometheus and Grafana
-- [ ] Istio
 - [ ] Skaffold
 - [ ] Tekton
 - [ ] CI (GitLab?) for Terraform
