@@ -31,3 +31,6 @@ google_kube_node_pool_max_count = 2
 
 # Kubernetes node machine type.
 google_kube_node_machine_type = "n1-standard-2"
+
+# Istio cert manager email
+istio_certmanager_email = "example@example.com"

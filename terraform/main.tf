@@ -112,3 +112,13 @@ module "helm" {
   kube_cluster_endpoint = module.google_container_cluster.endpoint
   kube_cluster_ca_cert  = module.google_container_cluster.ca_cert
 }
+
+module "istio" {
+  source = "./modules/istio"
+
+  kube_cluster_endpoint                = module.google_container_cluster.endpoint
+  kube_cluster_ca_cert                 = module.google_container_cluster.ca_cert
+  istio_certmanager_email              = var.istio_certmanager_email
+  istio_ingressgateway_loadbalancer_ip = module.google_address.address
+  istio_dns_domain                     = "${var.google_dns_subdomain}.${var.google_dns_domain}"
+}

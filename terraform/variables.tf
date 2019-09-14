@@ -58,6 +58,10 @@ variable "google_kube_api_ip_cidr_ranges" {
   description = "IP CIDR ranges allowed to access the Kubernetes API"
 }
 
+variable "istio_certmanager_email" {
+  description = "Istio cert manager email"
+}
+
 variable "google_service_account_roles" {
   description = "Roles to add to the service account"
 
@@ -114,3 +118,4 @@ variable "google_kube_node_machine_type" {
   description = "Kubernetes node machine type"
   default     = "n1-standard-2"
 }
+
