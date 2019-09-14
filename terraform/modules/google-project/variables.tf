@@ -34,3 +34,6 @@ variable "google_service_account_name" {
   description = "Service account name"
 }
 
+variable "google_ssh_public_key" {
+  description = "Public SSH key"
+}

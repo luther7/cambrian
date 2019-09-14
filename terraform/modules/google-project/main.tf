@@ -20,7 +20,12 @@ resource "google_project" "project" {
 }
 
 resource "google_project_service" "service" {
-  service                    = "iam.googleapis.com"
+  for_each = toset([
+    "compute.googleapis.com",
+    "iam.googleapis.com"
+  ])
+
+  service                    = each.value
   project                    = google_project.project.project_id
   disable_dependent_services = true
 }
@@ -29,6 +34,14 @@ resource "google_project_iam_member" "owner" {
   project    = google_project.project.project_id
   role       = "roles/owner"
   member     = "serviceAccount:${var.google_service_account_name}@${var.google_admin_project_name}.iam.gserviceaccount.com"
+
+  depends_on = [google_project_service.service]
+}
+
+resource "google_compute_project_metadata_item" "ssh_key" {
+  project    = google_project.project.project_id
+  key        = "ssh-key"
+  value      = var.google_ssh_public_key
 
   depends_on = [google_project_service.service]
 }

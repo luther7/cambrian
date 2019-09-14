@@ -15,10 +15,10 @@ google_region = "australia-southeast1"
 google_primary_zone = "australia-southeast1-a"
 
 # IP CIDR to allow SSH from.
-google_ssh_ip_cidr = "0.0.0.0/0"
+google_ssh_ip_cidr_range = ["0.0.0.0/0"]
 
 # IP CIDR range allowed to access the Kubernetes API.
-google_kube_api_ip_cidr  = "0.0.0.0/0"
+google_kube_api_ip_cidr_range = ["0.0.0.0/0"]
 
 # Public SSH key.
 google_ssh_public_key = "SNIP"

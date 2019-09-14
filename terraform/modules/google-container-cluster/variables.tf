@@ -31,12 +31,16 @@ variable "google_preemptable_kube_cluster" {
   default     = true
 }
 
-variable "google_subnetwork_secondary_ip_cidr_blocks" {
-  description = "Secondary IP CIDR blocks to add to the cluster"
+variable "google_cluster_secondary_range_name" {
+  description = "Cluster secondary range name"
 }
 
-variable "google_kube_api_ip_cidr" {
-  description = "IP CIDR range allowed to access the Kubernetes API"
+variable "google_services_secondary_range_name" {
+  description = "Services secondary range name"
+}
+
+variable "google_kube_api_ip_cidr_ranges" {
+  description = "IP CIDR ranges allowed to access the Kubernetes API"
 }
 
 variable "google_kube_enable_private_endpoint" {
@@ -49,8 +53,8 @@ variable "google_kube_enable_private_nodes" {
   default     = true
 }
 
-variable "google_kube_master_cidr_block" {
-  description = "Kubernetes master CIDR block"
+variable "google_kube_master_cidr_range" {
+  description = "Kubernetes master CIDR range"
   default     = "10.20.0.0/28"
 }
 

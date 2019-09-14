@@ -35,3 +35,9 @@ apply: workspace.select
 	    -var-file=../environments/admin/seed.tfvars \
 	    -var-file=../environments/$(environment)/seed.tfvars
 
+.PHONY: destroy
+destroy: workspace.select
+	source ../environments/admin/credentials.env && \
+	  terraform destroy \
+	    -var-file=../environments/admin/seed.tfvars \
+	    -var-file=../environments/$(environment)/seed.tfvars

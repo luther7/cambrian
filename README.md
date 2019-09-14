@@ -9,14 +9,13 @@ A GKE cluster for experimentation.
   - [ ] Bug in permission for setting NS records in root zone 
   - [ ] Docs
 - [ ] Helm
-- [ ] Ingress controller
 - [ ] Cert manager
+- [ ] Example application
+- [ ] Prometheus and Grafana
 - [ ] Istio
 - [ ] Skaffold
 - [ ] Tekton
-- [ ] Example application
 - [ ] CI (GitLab?) for Terraform
-- [ ] Prometheus and Grafana
 - [ ] Elastic Stack
 - [ ] Azure
 - [ ] OPA

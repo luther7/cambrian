@@ -27,14 +27,6 @@ resource "google_compute_network" "vpc" {
   depends_on = [google_project_service.service]
 }
 
-resource "google_compute_project_metadata_item" "ssh_key" {
-  project    = var.google_project_name
-  key        = "ssh-key"
-  value      = var.google_ssh_public_key
-
-  depends_on = [google_project_service.service]
-}
-
 resource "google_compute_router" "vpc_router" {
   name       = "router-${var.suffix}"
   project    = var.google_project_name
@@ -46,7 +38,7 @@ resource "google_compute_firewall" "firewall" {
   name          = "firewall-${var.suffix}"
   project       = var.google_project_name
   network       = google_compute_network.vpc.self_link
-  source_ranges = [var.google_ssh_ip_cidr]
+  source_ranges = var.google_ssh_ip_cidr_ranges
 
   allow {
     protocol = "tcp"
@@ -59,18 +51,9 @@ resource "google_compute_subnetwork" "subnetwork" {
   project                  = var.google_project_name
   region                   = var.google_region
   network                  = google_compute_network.vpc.self_link
-  ip_cidr_range            = var.google_cidr_block
+  ip_cidr_range            = var.google_cidr_range
   private_ip_google_access = true
-
-  secondary_ip_range = concat(
-    [
-      {
-        range_name    = "public-services",
-        ip_cidr_range = var.google_bastion_cidr_block
-      }
-    ],
-      var.google_subnetwork_secondary_ip_cidr_blocks
-    )
+  secondary_ip_range       = var.google_subnetwork_secondary_ip_cidr_ranges
 }
 
 resource "google_compute_address" "nat" {

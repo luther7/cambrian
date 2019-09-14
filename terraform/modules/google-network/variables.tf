@@ -18,22 +18,14 @@ variable "google_project_name" {
   description = "Project name"
 }
 
-variable "google_ssh_ip_cidr" {
+variable "google_ssh_ip_cidr_ranges" {
   description = "IP CIDR to allow SSH from"
 }
 
-variable "google_ssh_public_key" {
-  description = "Public SSH key"
+variable "google_cidr_range" {
+  description = "Main VPC CIDR range"
 }
 
-variable "google_cidr_block" {
-  description = "Main VPC CIDR block"
-}
-
-variable "google_bastion_cidr_block" {
-  description = "Bastion CIDR block"
-}
-
-variable "google_subnetwork_secondary_ip_cidr_blocks" {
-  description = "Secondary IP CIDR blocks to add to the subnetwork"
+variable "google_subnetwork_secondary_ip_cidr_ranges" {
+  description = "Secondary IP CIDR ranges to add to the subnetwork"
 }

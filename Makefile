@@ -33,3 +33,7 @@ plan:
 .PHONY: apply
 apply:
 	$(MAKE) -C terraform apply
+
+.PHONY: destroy
+destroy:
+	$(MAKE) -C terraform destroy

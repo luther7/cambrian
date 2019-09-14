@@ -42,12 +42,12 @@ resource "google_container_cluster" "cluster" {
   initial_node_count       = 1
 
   node_config {
-    preemptible     = var.google_preemptable_kube_cluster
+    preemptible = var.google_preemptable_kube_cluster
   }
 
   ip_allocation_policy {
-    cluster_secondary_range_name  = var.google_subnetwork_secondary_ip_cidr_blocks[0].range_name
-    services_secondary_range_name = var.google_subnetwork_secondary_ip_cidr_blocks[1].range_name
+    cluster_secondary_range_name  = var.google_cluster_secondary_range_name
+    services_secondary_range_name = var.google_services_secondary_range_name
   }
 
   master_auth {
@@ -60,15 +60,23 @@ resource "google_container_cluster" "cluster" {
   }
 
   master_authorized_networks_config {
-    cidr_blocks {
-      cidr_block = var.google_kube_api_ip_cidr
+    dynamic "cidr_blocks" {
+      for_each = var.google_kube_api_ip_cidr_ranges
+
+      content {
+        cidr_block = cidr_blocks.value
+      }
     }
   }
 
   private_cluster_config {
     enable_private_endpoint = var.google_kube_enable_private_endpoint
     enable_private_nodes    = var.google_kube_enable_private_nodes
-    master_ipv4_cidr_block  = var.google_kube_master_cidr_block
+    master_ipv4_cidr_block  = var.google_kube_master_cidr_range
+  }
+
+  lifecycle {
+    ignore_changes = [min_master_version]
   }
 
   depends_on = [google_project_service.service]
