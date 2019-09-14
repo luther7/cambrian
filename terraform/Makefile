@@ -2,30 +2,36 @@
 # Cambrian Terraform Makefile
 #
 
+shell := /bin/bash
 environment ?= development
 
 .PHONY: workspace.new
 workspace.new:
-	terraform workspace new $(environment)
+	source ../environments/admin/credentials.env && \
+	  terraform workspace new $(environment)
 
 .PHONY: workspace.select
 workspace.select:
-	terraform workspace select $(environment)
+	source ../environments/admin/credentials.env && \
+	  terraform workspace select $(environment)
 
 .PHONY: init
 init:
-	terraform init \
-	  -backend-config=../environments/admin/backend.tfvars
+	source ../environments/admin/credentials.env && \
+	  terraform init \
+	    -backend-config=../environments/admin/backend.tfvars
 
 .PHONY: plan
 plan: workspace.select
-	terraform plan \
-	  -var-file=../environments/admin/seed.tfvars \
-	  -var-file=../environments/$(environment)/seed.tfvars
+	source ../environments/admin/credentials.env && \
+	  terraform plan \
+	    -var-file=../environments/admin/seed.tfvars \
+	    -var-file=../environments/$(environment)/seed.tfvars
 
 .PHONY: apply
 apply: workspace.select
-	terraform apply \
-	  -var-file=../environments/admin/seed.tfvars \
-	  -var-file=../environments/$(environment)/seed.tfvars
+	source ../environments/admin/credentials.env && \
+	  terraform apply \
+	    -var-file=../environments/admin/seed.tfvars \
+	    -var-file=../environments/$(environment)/seed.tfvars
 

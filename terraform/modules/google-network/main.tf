@@ -12,17 +12,27 @@ provider "google-beta" {
   zone   = var.google_primary_zone
 }
 
+resource "google_project_service" "service" {
+  service                    = "compute.googleapis.com"
+  project                    = var.google_project_name
+  disable_dependent_services = true
+}
+
 resource "google_compute_network" "vpc" {
   name                    = "vpc-${var.suffix}"
   project                 = var.google_project_name
   routing_mode            = "REGIONAL"
   auto_create_subnetworks = "false"
+
+  depends_on = [google_project_service.service]
 }
 
 resource "google_compute_project_metadata_item" "ssh_key" {
   project    = var.google_project_name
   key        = "ssh-key"
   value      = var.google_ssh_public_key
+
+  depends_on = [google_project_service.service]
 }
 
 resource "google_compute_router" "vpc_router" {
@@ -49,13 +59,13 @@ resource "google_compute_subnetwork" "subnetwork" {
   project                  = var.google_project_name
   region                   = var.google_region
   network                  = google_compute_network.vpc.self_link
-  private_ip_google_access = true
   ip_cidr_range            = var.google_cidr_block
+  private_ip_google_access = true
 
   secondary_ip_range = concat(
     [
       {
-        range_name    = "public-services"
+        range_name    = "public-services",
         ip_cidr_range = var.google_bastion_cidr_block
       }
     ],
@@ -67,6 +77,8 @@ resource "google_compute_address" "nat" {
   name       = "nat-ip-${var.suffix}"
   project    = var.google_project_name
   region     = var.google_region
+
+  depends_on = [google_project_service.service]
 }
 
 resource "google_compute_router_nat" "vpc_nat" {

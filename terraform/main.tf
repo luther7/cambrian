@@ -79,6 +79,7 @@ module "google_container_cluster" {
   google_network                             = module.google_network.network
   google_subnetwork                          = module.google_network.subnetwork
   google_subnetwork_secondary_ip_cidr_blocks = var.google_subnetwork_secondary_ip_cidr_blocks
+  google_kube_master_cidr_block              = var.google_kube_master_cidr_block
   google_kube_api_ip_cidr                    = var.google_kube_api_ip_cidr
   google_kube_node_pool_min_count            = var.google_kube_node_pool_min_count
   google_kube_node_pool_max_count            = var.google_kube_node_pool_max_count

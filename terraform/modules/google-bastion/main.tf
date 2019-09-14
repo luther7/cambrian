@@ -12,10 +12,18 @@ provider "google-beta" {
   zone   = var.google_primary_zone
 }
 
+resource "google_project_service" "service" {
+  service                    = "compute.googleapis.com"
+  project                    = var.google_project_name
+  disable_dependent_services = true
+}
+
 resource "google_compute_address" "bastion" {
   name       = "bastion-ip-${var.suffix}"
   project    = var.google_project_name
   region     = var.google_region
+
+  depends_on = [google_project_service.service]
 }
 
 resource "google_compute_instance" "bastion" {

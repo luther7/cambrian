@@ -12,9 +12,23 @@ provider "google-beta" {
   zone   = var.google_primary_zone
 }
 
+resource "google_project_service" "service" {
+  for_each = toset([
+    "container.googleapis.com",
+    "compute.googleapis.com",
+    "logging.googleapis.com"
+  ])
+
+  service                    = each.value
+  project                    = var.google_project_name
+  disable_dependent_services = true
+}
+
 data "google_container_engine_versions" "location" {
   project  = var.google_project_name
   location = var.google_region
+
+  depends_on = [google_project_service.service]
 }
 
 resource "google_container_cluster" "cluster" {
@@ -56,6 +70,8 @@ resource "google_container_cluster" "cluster" {
     enable_private_nodes    = var.google_kube_enable_private_nodes
     master_ipv4_cidr_block  = var.google_kube_master_cidr_block
   }
+
+  depends_on = [google_project_service.service]
 }
 
 resource "google_container_node_pool" "cluster_node_pool" {
@@ -84,4 +100,6 @@ resource "google_container_node_pool" "cluster_node_pool" {
   lifecycle {
     ignore_changes = [node_count]
   }
+
+  depends_on = [google_project_service.service]
 }

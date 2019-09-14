@@ -2,6 +2,8 @@
 # Cambrian Makefile
 #
 
+shell := /bin/bash
+
 .PHONY: template.admin
 template.admin:
 	. ./scripts/template-admin

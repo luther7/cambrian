@@ -58,19 +58,6 @@ variable "google_kube_api_ip_cidr" {
   description = "IP CIDR range allowed to access the Kubernetes API"
 }
 
-variable "google_project_services" {
-  description = "Project services"
-
-  default = [
-    "container.googleapis.com",
-    "compute.googleapis.com",
-    "iam.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
-    "dns.googleapis.com",
-    "logging.googleapis.com"
-  ]
-}
-
 variable "google_service_account_roles" {
   description = "Roles to add to the service account"
 
@@ -98,14 +85,19 @@ variable "google_subnetwork_secondary_ip_cidr_blocks" {
 
   default = [
     {
-      range_name    = "services"
-      ip_cidr_range = "10.1.0.0/20"
+      range_name    = "services",
+      ip_cidr_range = "10.22.0.0/20"
     },
     {
-      range_name    = "pods"
-      ip_cidr_range = "10.2.0.0/14"
+      range_name    = "pods",
+      ip_cidr_range = "10.24.0.0/14"
     }
   ]
+}
+
+variable "google_kube_master_cidr_block" {
+  description = "Kubernetes master CIDR block"
+  default     = "10.20.0.0/28"
 }
 
 variable "google_kube_node_pool_min_count" {

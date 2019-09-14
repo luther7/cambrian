@@ -4,8 +4,10 @@ A GKE cluster for experimentation.
 
 # To do
 
-- [X] GCP account set up scripts
-- [ ] GKE cluster
+- [X] Google Cloud account set up scripts
+- [ ] Google Cloud
+  - [ ] Bug in permission for setting NS records in root zone 
+  - [ ] Docs
 - [ ] Helm
 - [ ] Ingress controller
 - [ ] Cert manager

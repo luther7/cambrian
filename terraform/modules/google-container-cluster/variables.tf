@@ -41,7 +41,7 @@ variable "google_kube_api_ip_cidr" {
 
 variable "google_kube_enable_private_endpoint" {
   description = "Kubernetes enable private endpoint"
-  default     = true
+  default     = false
 }
 
 variable "google_kube_enable_private_nodes" {
@@ -51,7 +51,7 @@ variable "google_kube_enable_private_nodes" {
 
 variable "google_kube_master_cidr_block" {
   description = "Kubernetes master CIDR block"
-  default     = "10.0.0.0/28"
+  default     = "10.20.0.0/28"
 }
 
 variable "google_kube_node_pool_min_count" {

@@ -20,6 +20,7 @@ source "environments/admin/seed.env"
 GOOGLE_PROJECT_IAM_ROLES=(
   "viewer"
   "storage.admin"
+  "dns.admin"
 )
 
 # IAM roles for the organization to bind to the Terraform service account.
@@ -35,6 +36,7 @@ GOOGLE_SERVICES=(
   "cloudbilling.googleapis.com"
   "iam.googleapis.com"
   "compute.googleapis.com"
+  "dns.googleapis.com"
 )
 
 # Create the admin project.
