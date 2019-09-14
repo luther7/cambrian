@@ -21,23 +21,21 @@ init:
 	  terraform init \
 	    -backend-config=../environments/admin/backend.tfvars
 
-.PHONY: plan
-plan: workspace.select
+.PHONY: exec
+exec: workspace.select
 	source ../environments/admin/credentials.env && \
-	  terraform plan \
+	  terraform $(command) \
 	    -var-file=../environments/admin/seed.tfvars \
 	    -var-file=../environments/$(environment)/seed.tfvars
+
+.PHONY: plan
+plan: command=plan
+plan: exec
 
 .PHONY: apply
-apply: workspace.select
-	source ../environments/admin/credentials.env && \
-	  terraform apply \
-	    -var-file=../environments/admin/seed.tfvars \
-	    -var-file=../environments/$(environment)/seed.tfvars
+apply: command=apply
+apply: exec
 
 .PHONY: destroy
-destroy: workspace.select
-	source ../environments/admin/credentials.env && \
-	  terraform destroy \
-	    -var-file=../environments/admin/seed.tfvars \
-	    -var-file=../environments/$(environment)/seed.tfvars
+destroy: command=destroy
+destroy: exec
