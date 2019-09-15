@@ -9,7 +9,7 @@ resource "random_string" "suffix" {
 }
 
 module "google_project" {
-  source = "./modules/google-project"
+  source = "./modules/google/project"
 
   suffix                      = random_string.suffix.result
   google_region               = var.google_region
@@ -23,7 +23,7 @@ module "google_project" {
 }
 
 module "google_dns_subdomain_zone" {
-  source = "./modules/google-dns-subdomain-zone"
+  source = "./modules/google/dns-subdomain-zone"
 
   suffix                    = random_string.suffix.result
   google_region             = var.google_region
@@ -36,7 +36,7 @@ module "google_dns_subdomain_zone" {
 }
 
 module "google_service_account" {
-  source = "./modules/google-service-account"
+  source = "./modules/google/service-account"
 
   suffix                       = random_string.suffix.result
   google_region                = var.google_region
@@ -47,7 +47,7 @@ module "google_service_account" {
 }
 
 module "google_network" {
-  source = "./modules/google-network"
+  source = "./modules/google/network"
 
   suffix                    = random_string.suffix.result
   google_region             = var.google_region
@@ -68,7 +68,7 @@ module "google_network" {
 }
 
 module "google_address" {
-  source = "./modules/google-address"
+  source = "./modules/google/address"
 
   suffix                 = random_string.suffix.result
   google_region          = var.google_region
@@ -79,7 +79,7 @@ module "google_address" {
 }
 
 module "google_bastion" {
-  source = "./modules/google-bastion"
+  source = "./modules/google/bastion"
 
   suffix              = random_string.suffix.result
   google_region       = var.google_region
@@ -89,7 +89,7 @@ module "google_bastion" {
 }
 
 module "google_container_cluster" {
-  source = "./modules/google-container-cluster"
+  source = "./modules/google/container-cluster"
 
   suffix                               = random_string.suffix.result
   google_region                        = var.google_region

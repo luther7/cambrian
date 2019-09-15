@@ -12,11 +12,15 @@ template.admin:
 bootstrap.google:
 	. ./scripts/bootstrap-google
 
-environment ?= development
+ENVIRONMENT ?= development
+
+.PHONY: template.environment
+template.environment:
+	ENVIRONMENT=$(ENVIRONMENT) ./scripts/template-environment
 
 .PHONY: credentials.google
 credentials.google:
-	GOOGLE_ENVIRONMENT=$(environment). ./scripts/credentials-google
+	ENVIRONMENT=$(ENVIRONMENT) ./scripts/credentials-google
 
 .PHONY: workspace.new
 workspace.new:

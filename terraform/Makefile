@@ -3,17 +3,17 @@
 #
 
 shell := /bin/bash
-environment ?= development
+ENVIRONMENT ?= development
 
 .PHONY: workspace.new
 workspace.new:
 	source ../environments/admin/credentials.env && \
-	  terraform workspace new $(environment)
+	  terraform workspace new $(ENVIRONMENT)
 
 .PHONY: workspace.select
 workspace.select:
 	source ../environments/admin/credentials.env && \
-	  terraform workspace select $(environment)
+	  terraform workspace select $(ENVIRONMENT)
 
 .PHONY: init
 init:
@@ -26,7 +26,7 @@ exec: workspace.select
 	source ../environments/admin/credentials.env && \
 	  terraform $(command) \
 	    -var-file=../environments/admin/seed.tfvars \
-	    -var-file=../environments/$(environment)/seed.tfvars
+	    -var-file=../environments/$(ENVIRONMENT)/seed.tfvars
 
 .PHONY: plan
 plan: command=plan

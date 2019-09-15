@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -xeu
+
+#
+# Template an environment.
+#
+
+if [ -d "environments/${ENVIRONMENT}" ]; then
+  echo "ERROR: Environment '${ENVIRONMENT}' already exists."
+  exit 1
+fi
+
+cp -rp environments/template "environments/${ENVIRONMENT}"
