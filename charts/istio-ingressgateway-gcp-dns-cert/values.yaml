@@ -1,0 +1,33 @@
+
+# commonName: "*.example.com"
+
+# testDomain: "example.com"
+
+# domains:
+# - "*.example.com"
+# - "example.com"
+
+# issuerEmail: "admin@example.com"
+
+# gcpProject: example-project
+
+existingServiceAccountSecret: false
+
+# Only used when there is an existing service account
+# serviceAccountSecretName: service-account
+
+serviceAccountSecretKey: credentials.json
+
+# serviceAccountCredentials: |
+#   {
+#     "type": "example",
+#     "project_id": "examplez-admin",
+#     "private_key_id": "example",
+#     "private_key": "example,
+#     "client_email": "example",
+#     "client_id": "example",
+#     "auth_uri": "example",
+#     "token_uri": "example",
+#     "auth_provider_x509_cert_url": "example",
+#     "client_x509_cert_url": "example"
+#   }

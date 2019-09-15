@@ -1,0 +1,5 @@
+1. Wait until the certificate is issued:
+  kubectl --namespace {{ .Release.Namespace }} describe certificates | grep Message
+      Message:               Certificate is up to date and has not expired
+2. Test by requesting the test domain:
+  curl --verbose --insecure https://{{ .Values.testDomain }}
