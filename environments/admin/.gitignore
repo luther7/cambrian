@@ -2,4 +2,4 @@ backend.tfvars
 google.env
 seed.env
 seed.tfvars
-terraform-credentials.json
+credentials.json
