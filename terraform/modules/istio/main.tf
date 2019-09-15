@@ -20,6 +20,11 @@ provider "helm" {
 resource "kubernetes_namespace" "istio_system" {
   metadata {
     name = "istio-system"
+
+    labels = {
+      "istio-injection"                       = "disabled"
+      "certmanager.k8s.io/disable-validation" = "true"
+    }
   }
 }
 
@@ -36,7 +41,7 @@ resource "kubernetes_secret" "kiali_login" {
 
   metadata {
     name      = "kiali"
-    namespace = "istio-system"
+    namespace = kubernetes_namespace.istio_system.metadata.0.name
   }
 }
 
@@ -49,7 +54,7 @@ resource "helm_release" "istio_init" {
   name       = "istio-init"
   chart      = "istio-init"
   namespace  = "istio-system"
-  repository = "istio"
+  repository = data.helm_repository.istio.metadata.0.name
   version    = "1.3.0"
 
   set {
@@ -62,7 +67,7 @@ resource "helm_release" "istio" {
   name       = "istio"
   chart      = "istio"
   namespace  = "istio-system"
-  repository = "istio"
+  repository = data.helm_repository.istio.metadata.0.name
   version    = "1.3.0"
 
 
@@ -75,22 +80,10 @@ resource "helm_release" "istio" {
     gateways:
       istio-ingressgateway:
         loadBalancerIP: ${var.istio_ingressgateway_loadbalancer_ip}
-        sds.enabled: true
-
-    global:
-      k8sIngress:
-        enabled: true
-        enableHttps: true
-        gatewayName: ingressgateway
+        sds.enabled: false
 
     kiali:
       enabled: true
-      ingress:
-        enabled: true
-        annotations:
-          kubernetes.io/ingress.class: istio
-        hosts:
-          - ${var.istio_dns_domain}
     EOT
     ,
   ]

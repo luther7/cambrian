@@ -35,6 +35,11 @@ module "google_dns_subdomain_zone" {
   google_dns_subdomain      = var.google_dns_subdomain
 }
 
+locals {
+  google_service_account_kube_name = "${var.google_service_account_name}-kube"
+  google_service_account_dns_name  = "${var.google_service_account_name}-dns"
+}
+
 module "google_service_account" {
   source = "./modules/google/service-account"
 
@@ -42,8 +47,19 @@ module "google_service_account" {
   google_region                = var.google_region
   google_primary_zone          = var.google_primary_zone
   google_project_name          = module.google_project.project_id
-  google_service_account_name  = var.google_service_account_name
-  google_service_account_roles = var.google_service_account_roles
+  google_service_account_name  = local.google_service_account_kube_name
+  google_service_account_roles = var.google_service_account_kube_roles
+}
+
+module "google_service_account_dns" {
+  source = "./modules/google/service-account"
+
+  suffix                       = random_string.suffix.result
+  google_region                = var.google_region
+  google_primary_zone          = var.google_primary_zone
+  google_project_name          = module.google_project.project_id
+  google_service_account_name  = local.google_service_account_dns_name
+  google_service_account_roles = ["dns.admin"]
 }
 
 module "google_network" {

@@ -5,6 +5,8 @@
 shell := /bin/bash
 ENVIRONMENT ?= development
 
+main: apply
+
 .PHONY: workspace.new
 workspace.new:
 	source ../environments/admin/credentials.env && \

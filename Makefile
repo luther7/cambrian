@@ -4,6 +4,8 @@
 
 shell := /bin/bash
 
+main: apply
+
 .PHONY: template.admin
 template.admin:
 	. ./scripts/template-admin

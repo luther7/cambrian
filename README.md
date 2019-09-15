@@ -8,6 +8,7 @@ A Kubernetes cluster for experimentation.
 - [X] Google Cloud.
 - [X] Helm.
 - [ ] Istio.
+  - [ ] Helm Chart with answer from: https://stackoverflow.com/questions/55009028/configure-ssl-certificates-in-kubernetes-with-cert-manager-istio-ingress-and-let
 - [ ] Example application.
 - [ ] Prometheus and Grafana.
 - [ ] Skaffold.

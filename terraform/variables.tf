@@ -62,8 +62,8 @@ variable "istio_certmanager_email" {
   description = "Istio cert manager email"
 }
 
-variable "google_service_account_roles" {
-  description = "Roles to add to the service account"
+variable "google_service_account_kube_roles" {
+  description = "Roles to add to the Kubernetes service account"
 
   default = [
     "roles/storage.admin",
